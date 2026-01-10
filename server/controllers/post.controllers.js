@@ -1,4 +1,5 @@
 const {posts}=require("../data/store");
+const{getpg}=require("../utils/pagination");
  exports.createp=(req,res)=>{
     const{title,content}=req.body;
     if(!title||!content){
@@ -23,8 +24,14 @@ const {posts}=require("../data/store");
 
  };
  exports.getps=(req,res)=>{
+    const {page,limit,offset}=getpg(req);
+    const currentposts=posts.slice(offset,offset+limit)/*slice ta3mel array jdid men start le debut mel array tek*/
      res.status(200).json({
-        posts:posts,
+        page,
+        limit,
+        total:posts.length,
+        data:currentposts
+
     }
     );
  };

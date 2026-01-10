@@ -47,3 +47,7 @@ chouf eli logic eli hatou eli fil routes tek
 express-validator howa library ama eli moteur teou howa validator.js
 
 fare9 bin exists() notempty()
+  
+/api/users?age=20&role=admin el query how el values ta3 ? yani age =20 & role=admin les valeur athokom zouz houma query
+.optional is an express validator ishouf estceque page maw jouda & ken mesh mawjou -> ok si majouda yamel validation teou
+ofset howa nombre ta3 skiped pages 
