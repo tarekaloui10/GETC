@@ -51,3 +51,10 @@ fare9 bin exists() notempty()
 /api/users?age=20&role=admin el query how el values ta3 ? yani age =20 & role=admin les valeur athokom zouz houma query
 .optional is an express validator ishouf estceque page maw jouda & ken mesh mawjou -> ok si majouda yamel validation teou
 ofset howa nombre ta3 skiped pages 
+
+query is the how to fetch ya 3i mafathaln a3tini 10
+posts per page 
+
+params how source id 
+
+ body how data eli tab3atha

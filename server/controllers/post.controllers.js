@@ -36,7 +36,7 @@ const{getpg}=require("../utils/pagination");
     );
  };
  exports.getp=(req,res)=>{
-    const postid=parseInt(req.params.id);
+    const postid=parseInt(req.params.postid);
     if(isNaN(postid)){
         return res.status(400).json({
             message:"invalid post id",
@@ -53,7 +53,7 @@ const{getpg}=require("../utils/pagination");
     });
  }
  exports.deletep=(req,res)=>{
-    const postid=parseInt(req.params.id);
+    const postid=parseInt(req.params.postid);
     if(isNaN(postid)){
         return res.status(400).json({
             message:"invalid post id",
@@ -78,7 +78,7 @@ const{getpg}=require("../utils/pagination");
 
  };
  exports.updatep=(req,res)=>{
-    const postid=parseInt(req.params.id);
+    const postid=parseInt(req.params.postid);
     if(isNaN(postid)){
         return res.status(400).json({
             message:"invalid post id",
@@ -102,6 +102,7 @@ const{getpg}=require("../utils/pagination");
 
     res.json({
         message:"post has been updated sucessfully",
+        post,
     });
 
  }
