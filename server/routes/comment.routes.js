@@ -8,5 +8,5 @@ const {
 }=require("../controllers/comment.controllers");
 router.post("/post/:pid/comment",authMiddleware,creatcomment);
 router.get("/post/:pid/comment",getc);
-router.delete("/post/comment/:cid",authMiddleware,deletec);
+router.delete("/comment/:cid",authMiddleware,deletec);
 module.exports=router;

@@ -7,7 +7,8 @@ const {registervald,loginvald}=require("../validators/auth.validator");
 router.post("/register",registervald,check,register);/*url map */
 router.post("/login",loginvald,check,login);
 router.get("/profile",amiddleware,(req,res)=>{
-    res.json({message:"protected route accessed",
+    res.json({
+        message:"protected route accessed",
         user:req.user,
 
     });

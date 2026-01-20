@@ -1,32 +1,40 @@
 const bcrypt=require("bcryptjs");
 const jwt=require("jsonwebtoken");
-const user=[];
+const pool = require("../db/db");
 exports.register=async(req,res)=>{
     /*10 heya nombre ta3 cryptageb eli besh isir 3al pass*/
-    const{name,email,password}=req.body;/*ena nabth json lebdan ta3 request yetkafel bkol chay*/
+    const{name,email,password}=req.body;/*ena nabth json body ta3 request yetkafel bkol chay*/
     if(!name||!email||!password){
         return res.status(400).json({
             message:"all fileds are required"
         });
     }
-    const hashedpass=await bcrypt.hash(password,10);
-    const newuser={
-        id:user.length+1,
-        name,
-        email,
-        password:hashedpass
-    };
-    user.push(newuser);
+    try{
+            const hashedpass=await bcrypt.hash(password,10);
+            const result=await pool.query("insert into users (username,email,password) values($1,$2,$3) returning iduser",[name,email,hashedpass]
 
-    const token=jwt.sign(
-        {userid:newuser.id},/*payload*/
-        process.env.JWT_SECRET,/*secret*/
-        {expiresIn:"1h"}
+            );/*postgersql bensbalih 1 awel element 2 theni element ect*/
+             const token=jwt.sign(
+                    {userid:result.rows[0].iduser},/*payload*/
+                    process.env.JWT_SECRET,/*secret*/
+                    {expiresIn:"1h"}
     );
-    res.status(201).json({
-        message:"registred successfully in successfully",
-        token/*atheya zedneh besh back end iwali ya3ref user fi kol mara*/
-    });
+            return res.status(201).json({
+                message:"user registration successfully",
+                token
+            });
+
+    }catch(err){
+        console.error(err);/*this for the developper*/
+        if(err.code==="23505"){
+            res.status(400).json({
+                error:"email is already exist",
+            });
+        }
+        return res.status(500).json({
+            error:"Internal error server",
+        });
+    }
 };
 exports.login=async(req,res)=>{
     const{email,password}=req.body;
@@ -35,20 +43,23 @@ exports.login=async(req,res)=>{
             message:"all fields must be required"
         });
     }
-    const users=user.find(u=> u.email===email)
-    if(!users){
+    try{
+
+    
+    const verif= await pool.query("select iduser ,email,password from users where email=$1",[email]);
+    if(verif.rows.length===0){
         return res.status(401).json({
             message:"the email or the password are inccorrect"
         });
     }
-    const same=await bcrypt.compare(password,users.password);
+    const same=await bcrypt.compare(password,verif.rows[0].password);
     if(!same){
         return res.status(401).json({
-            message:"passord is invalid"
+            message:"password is invalid"
         });
     }
     const token=jwt.sign(
-        {userid:users.id},
+        {userid:verif.rows[0].iduser},
         process.env.JWT_SECRET,
         {expiresIn:"1h"}
     );
@@ -56,5 +67,13 @@ exports.login=async(req,res)=>{
         message:"logged in successfully",
         token
     });
+}catch(err){
+    console.error(err);
+    res.status(500).json({
+        error:"internal server error"
+    });
+
+    
+}
 
 }
